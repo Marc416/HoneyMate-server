@@ -1,0 +1,12 @@
+name: schedule-delete-branch
+
+on:
+ schedule:
+  - cron: '0 21 * * *'
+
+jobs:
+ delete-branch:
+  runs-on: ubuntu-latest
+
+  stpes:
+   - name: Delete Branch
