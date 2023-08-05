@@ -32,4 +32,9 @@ dependencies {
 
     implementation("jakarta.persistence:jakarta.persistence-api:2.2.3")
     implementation("jakarta.transaction:jakarta.transaction-api:1.3.3")
+
+    testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:1.3.50")
+    testImplementation("org.assertj:assertj-core:3.23.1")
+    testImplementation("io.mockk:mockk:1.12.4")
 }
