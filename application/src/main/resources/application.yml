@@ -5,8 +5,8 @@ server:
 
 spring:
   datasource:
-    url: # 입력 해야 댑니당
-    driver-class-name: # 입력 해야 댑니당
+    url: jdbc:mariadb://nas.leesunr.kr:53306/honey_mate_dev
+    driver-class-name: org.mariadb.jdbc.Driver
     hikari:
       username: # 입력 해야 댑니당
       password: # 입력 해야 댑니당

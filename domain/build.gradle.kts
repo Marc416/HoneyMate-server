@@ -32,6 +32,7 @@ dependencies {
 
     implementation("jakarta.persistence:jakarta.persistence-api:2.2.3")
     implementation("jakarta.transaction:jakarta.transaction-api:1.3.3")
+    implementation("org.mariadb.jdbc:mariadb-java-client:3.1.4")
 
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:1.3.50")
