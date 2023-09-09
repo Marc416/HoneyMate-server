@@ -48,6 +48,10 @@ dependencies {
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.springframework.boot:spring-boot-starter-cache")
 	implementation("com.github.ben-manes.caffeine:caffeine")
+	implementation("org.springframework.cloud:spring-cloud-starter-openfeign:3.1.3")
+
+	// kotlin-logging
+	implementation("io.github.microutils:kotlin-logging-jvm:3.0.2")
 
 	// Swagger
 	implementation("org.springdoc:springdoc-openapi-ui:1.6.11")
