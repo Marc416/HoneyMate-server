@@ -1,25 +1,32 @@
 package com.cheongseolmo.domain.study.service
 
+import com.cheongseolmo.domain.account.repository.AccountRepository
 import com.cheongseolmo.domain.study.entity.Study
 import com.cheongseolmo.domain.study.entity.StudySpec
-import com.cheongseolmo.domain.study.repository.FakeStudyRepository
+import com.cheongseolmo.domain.study.repository.fake.FakeStudyRepository
 import com.cheongseolmo.domain.study.repository.StudyRepository
+import com.cheongseolmo.domain.study.repository.fake.FakeAccountRepository
 import com.cheongseolmo.domain.study.usecase.StudyCommandUseCase
 import com.cheongseolmo.domain.study.usecase.StudyQueryUseCase
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-class StudyQueryProcessorTest{
+class StudyQueryProcessorTest {
+    lateinit var accountRepository: AccountRepository
     lateinit var studyRepository: StudyRepository
     lateinit var studyQueryProcessor: StudyQueryUseCase
     lateinit var studyCommandProcessor: StudyCommandUseCase
 
     @BeforeEach
     internal fun setUp() {
+        this.accountRepository = FakeAccountRepository()
         this.studyRepository = FakeStudyRepository()
         this.studyQueryProcessor = StudyQueryProcessor(studyRepository)
-        this.studyCommandProcessor = StudyCommandProcessor(studyRepository)
+        this.studyCommandProcessor = StudyCommandProcessor(
+            studyRepository = studyRepository,
+            accountRepository = accountRepository,
+        )
     }
 
     @Test
