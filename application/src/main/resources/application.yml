@@ -3,17 +3,19 @@ server:
   servlet:
     context-path: /
 
+#  u8jK75sBggT2YHbIdcI6;ncloud_secretkey=hJeK1fExM6xneyDUuKrUUm4zHDac5mQEzQg3pG7y;password=a37c12aEdA52!@#;username=watermelonlover
+
 ncloud:
-  accesskey: ${ncloud_accesskey}
-  secretkey: ${ncloud_secretkey}
+  accesskey: "u8jK75sBggT2YHbIdcI6"
+  secretkey: "=hJeK1fExM6xneyDUuKrUUm4zHDac5mQEzQg3pG7y"
 
 spring:
   datasource:
     url: jdbc:mariadb://nas.leesunr.kr:53306/honey_mate_dev
     driver-class-name: org.mariadb.jdbc.Driver
     hikari:
-      username: ${username}
-      password: ${password}
+      username: "gw9122"
+      password: "xortlWkd224!"
   jpa:
     show-sql: true
     database-platform: org.hibernate.dialect.MariaDBDialect

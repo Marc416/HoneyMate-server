@@ -20,7 +20,7 @@ class Study(
     val id: Long = 0L
 
     @Column(name = "entity_key", columnDefinition = "BINARY(16)")
-    val key: UUID = UUID.randomUUID()
+    var key: UUID = UUID.randomUUID()
 
     @OneToMany(mappedBy = "study", cascade = [CascadeType.ALL], orphanRemoval = true)
     // 이거 MutableList로 사용하지 말고 List로 변경 해야 합니다.

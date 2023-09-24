@@ -2,7 +2,9 @@ package com.cheongseolmo.domain.study.service
 
 import com.cheongseolmo.domain.account.repository.AccountRepository
 import com.cheongseolmo.domain.study.contract.command.CreateStudyCodeCommand
+import com.cheongseolmo.domain.study.contract.command.StudyCodeRead
 import com.cheongseolmo.domain.study.entity.Study
+import com.cheongseolmo.domain.study.entity.StudyCode
 import com.cheongseolmo.domain.study.exception.NotFoundStudyException
 import com.cheongseolmo.domain.study.repository.StudyRepository
 import com.cheongseolmo.domain.study.usecase.StudyCommandUseCase
@@ -17,10 +19,11 @@ open class StudyCommandProcessor(
         return studyRepository.save(study)
     }
 
-    override fun createCode(command: CreateStudyCodeCommand): Study {
+    override fun createCode(command: CreateStudyCodeCommand): StudyCodeRead {
         val study = studyRepository.findByKey(command.studyKey) ?: throw NotFoundStudyException()
-        study.createCode(command.displayName)
-        return studyRepository.save(study)
+        val studyCode = study.createCode(command.displayName)
+        studyRepository.save(study)
+        return StudyCodeRead.of(studyCode)
     }
 
     override fun createAppLink(studyKey: UUID, email: String, appLink: String): String {

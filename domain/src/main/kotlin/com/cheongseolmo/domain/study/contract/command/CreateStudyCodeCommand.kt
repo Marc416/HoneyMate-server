@@ -1,5 +1,6 @@
 package com.cheongseolmo.domain.study.contract.command
 
+import com.cheongseolmo.domain.study.entity.StudyCode
 import java.time.ZonedDateTime
 import java.util.*
 

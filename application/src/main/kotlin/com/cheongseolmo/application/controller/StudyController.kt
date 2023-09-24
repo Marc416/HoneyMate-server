@@ -2,8 +2,8 @@ package com.cheongseolmo.application.controller
 
 import com.cheongseolmo.domain.notification.contract.MailTemplate
 import com.cheongseolmo.domain.study.contract.command.CreateStudyCodeCommand
+import com.cheongseolmo.domain.study.contract.command.StudyCodeRead
 import com.cheongseolmo.domain.study.entity.Study
-import com.cheongseolmo.domain.study.entity.StudyCode
 import com.cheongseolmo.domain.study.entity.StudySpec
 import com.cheongseolmo.domain.study.service.StudyFacadeUseCase
 import com.cheongseolmo.domain.study.usecase.EmailUseCase
@@ -59,11 +59,16 @@ class StudyController(
         tags = ["Study"],
         summary = "특정 스터디의 코드 생성",
     )
-    @PostMapping("/code")
+    @PostMapping("/{studyKey}/code")
     fun createStudyCode(
+        @PathVariable studyKey: UUID,
         @RequestBody request: StudyCodeRequest,
-    ): Study {
-        return studyCommandUseCase.createCode(request.toCommand())
+    ): StudyCodeRead {
+        return studyCommandUseCase.createCode(
+            command = request.toCommand(
+                studyKey = studyKey,
+            )
+        )
     }
 
     @Operation(
@@ -120,6 +125,7 @@ data class InviteRequest(
 
 data class StudyResponse(
     val id: Long,
+    val key: String,
     val title: String,
     val subtitle: String,
     val description: String,
@@ -149,6 +155,7 @@ data class StudyResponse(
         fun of(study: Study): StudyResponse {
             return StudyResponse(
                 id = study.id,
+                key = study.key.toString(),
                 title = study.title,
                 subtitle = study.subtitle,
                 description = study.description,
@@ -189,12 +196,11 @@ data class StudyCommand(
 }
 
 data class StudyCodeRequest(
-    val studyKey: UUID,
     val displayName: String,
     // 코드의 만료 시간은 있을수도 없을 수도 있습니다.
     val expiredAt: ZonedDateTime? = null,
 ) {
-    fun toCommand(): CreateStudyCodeCommand {
+    fun toCommand(studyKey: UUID): CreateStudyCodeCommand {
         return CreateStudyCodeCommand(
             studyKey = studyKey,
             displayName = displayName,
