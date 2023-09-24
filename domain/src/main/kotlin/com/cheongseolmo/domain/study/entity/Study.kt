@@ -19,7 +19,6 @@ class Study(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0L
 
-    // study key랑 아고라 channel id로 이용
     @Column(name = "entity_key", columnDefinition = "BINARY(16)")
     val key: UUID = UUID.randomUUID()
 

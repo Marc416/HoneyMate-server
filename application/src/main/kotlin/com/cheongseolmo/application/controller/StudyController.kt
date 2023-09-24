@@ -1,22 +1,22 @@
 package com.cheongseolmo.application.controller
 
-import com.cheongseolmo.domain.account.usecase.AccountCreatorUseCase
-import com.cheongseolmo.domain.account.usecase.AccountFinderUseCase
 import com.cheongseolmo.domain.notification.contract.MailTemplate
+import com.cheongseolmo.domain.study.contract.command.CreateStudyCodeCommand
 import com.cheongseolmo.domain.study.entity.Study
+import com.cheongseolmo.domain.study.entity.StudyCode
 import com.cheongseolmo.domain.study.entity.StudySpec
 import com.cheongseolmo.domain.study.service.StudyFacadeUseCase
 import com.cheongseolmo.domain.study.usecase.EmailUseCase
 import com.cheongseolmo.domain.study.usecase.StudyCommandUseCase
-import com.cheongseolmo.domain.study.usecase.StudyInviteUseCase
 import com.cheongseolmo.domain.study.usecase.StudyQueryUseCase
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import mu.KotlinLogging
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import org.springframework.web.servlet.view.RedirectView
+import java.time.ZonedDateTime
 import java.util.*
-import javax.persistence.*
 
 private val logging = KotlinLogging.logger {}
 
@@ -53,6 +53,20 @@ class StudyController(
     }
 
     @Operation(
+        security = [
+            SecurityRequirement(name = "Authorization"),
+        ],
+        tags = ["Study"],
+        summary = "특정 스터디의 코드 생성",
+    )
+    @PostMapping("/code")
+    fun createStudyCode(
+        @RequestBody request: StudyCodeRequest,
+    ): Study {
+        return studyCommandUseCase.createCode(request.toCommand())
+    }
+
+    @Operation(
         tags = ["Study"],
         summary = "인증된 유저에게 스터디방 참가 링크 보내기",
     )
@@ -72,7 +86,7 @@ class StudyController(
         logging.info { "host: $hostAddress" }
         val redirectUrl = "${hostAddress}/study/join?mobileAppLink=$mobileAppLink"
 
-        val redirectUrlHyperlink ="<HTML><body> <a href=\"${redirectUrl}\">InviteLink</a></body></HTML>"
+        val redirectUrlHyperlink = "<HTML><body> <a href=\"${redirectUrl}\">InviteLink</a></body></HTML>"
 
         return emailUseCase.send(
             mailTemplate = MailTemplate(
@@ -170,6 +184,21 @@ data class StudyCommand(
                 runningPeriod = spec.runningPeriod,
                 numberOfRecruits = spec.numberOfRecruits,
             )
+        )
+    }
+}
+
+data class StudyCodeRequest(
+    val studyKey: UUID,
+    val displayName: String,
+    // 코드의 만료 시간은 있을수도 없을 수도 있습니다.
+    val expiredAt: ZonedDateTime? = null,
+) {
+    fun toCommand(): CreateStudyCodeCommand {
+        return CreateStudyCodeCommand(
+            studyKey = studyKey,
+            displayName = displayName,
+            expiredAt = expiredAt,
         )
     }
 }

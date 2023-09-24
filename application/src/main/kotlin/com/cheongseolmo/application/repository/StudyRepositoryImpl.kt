@@ -4,6 +4,7 @@ import com.cheongseolmo.domain.study.entity.Study
 import com.cheongseolmo.domain.study.repository.StudyRepository
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
+import java.util.*
 
 @Repository
 class StudyRepositoryImpl(
@@ -19,8 +20,14 @@ class StudyRepositoryImpl(
     override fun save(study: Study): Study {
         return jpaRepository.save(study)
     }
+
+    override fun findByKey(key: UUID): Study? {
+        return jpaRepository.findByKey(key)
+    }
 }
 
 interface JpaStudyRepository: JpaRepository<Study, Long>{
     override fun findAll(): List<Study>
+
+    fun findByKey(key: UUID): Study?
 }
