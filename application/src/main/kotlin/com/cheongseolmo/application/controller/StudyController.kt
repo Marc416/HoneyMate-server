@@ -73,13 +73,13 @@ class StudyController(
 
     @Operation(
         tags = ["Study"],
-        summary = "스터디 단건 조회",
+        summary = "스터디 단건 조회(코드로 조회)",
     )
-    @GetMapping("/{studyKey}")
+    @GetMapping("/{code}")
     fun findStudyByKey(
-        @PathVariable studyKey: String,
+        @PathVariable code: String,
     ):  StudyResponse {
-        return StudyResponse.of(studyQueryUseCase.findByKey(studyKey=studyKey))
+        return StudyResponse.of(studyQueryUseCase.findByCode(code=code))
     }
 
     @Operation(
@@ -92,7 +92,8 @@ class StudyController(
     ): Any {
         val mobileAppLink = studyFacadeUseCase.invite(
             email = inviteRequest.email,
-            studyKey = UUID.fromString(inviteRequest.studyKey),
+            name = inviteRequest.name,
+            studyCode = inviteRequest.studyCode,
             appLink = inviteRequest.appLink
         )
 
@@ -130,7 +131,8 @@ class StudyController(
 
 data class InviteRequest(
     val email: String,
-    val studyKey: String,
+    val studyCode: String,
+    val name: String,
     val appLink: String     // 모바일에서 자유롭게 앱링크를 만들 수 있도록 프로퍼티로 받도록 합니다.
 )
 
@@ -180,7 +182,7 @@ data class StudyResponse(
 
 data class StudyCommand(
     val title: String,
-    val studyKey: String,
+    val defaultStudyCode: String? = null,
     val subtitle: String,
     val description: String,
     val spec: StudySpecCommand,
@@ -195,7 +197,6 @@ data class StudyCommand(
     fun to(): Study {
         return Study(
             title = title,
-            studyKey = studyKey,
             subtitle = subtitle,
             description = description,
             spec = StudySpec(

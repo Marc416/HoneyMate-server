@@ -33,7 +33,7 @@ class ChattingRoomCommandController(
     ) {
         chattingRoomCommandUseCase.enter(
             accountKey = UUID.fromString(enterOrOutRequest.accountKey),
-            studyKey = enterOrOutRequest.studyKey
+            studyCode = enterOrOutRequest.studyCode
         )
     }
 
@@ -47,20 +47,20 @@ class ChattingRoomCommandController(
     ) {
         chattingRoomCommandUseCase.out(
             accountKey = UUID.fromString(enterOrOutRequest.accountKey),
-            studyKey = enterOrOutRequest.studyKey
+            studyCode = enterOrOutRequest.studyCode
         )
     }
 }
 
 data class ChattingRoomCreateRequest(
-    val studyKey: String,
+    val studyCode: String,
     val title: String,
     val startAt: ZonedDateTime,
     val attendeeLimit: Int
 ) {
     fun toCommand(): ChattingRoomCreateCommand {
         return ChattingRoomCreateCommand(
-            studyKey = studyKey,
+            studyCode = studyCode,
             title = title,
             startAt = startAt,
             attendeeLimit = attendeeLimit
@@ -70,5 +70,5 @@ data class ChattingRoomCreateRequest(
 
 data class EnterOrOutRequest(
     val accountKey: String,
-    val studyKey: String,
+    val studyCode: String,
 )
