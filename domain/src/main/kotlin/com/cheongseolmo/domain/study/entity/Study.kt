@@ -8,6 +8,7 @@ import javax.persistence.*
 class Study(
     val title: String,
     val subtitle: String = "",
+    val studyKey: String,           // 스터디방 코드로 고유키임.
 
     @Column(columnDefinition = "TEXT")
     val description: String = "",

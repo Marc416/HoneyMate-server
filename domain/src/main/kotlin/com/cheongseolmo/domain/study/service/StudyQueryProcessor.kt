@@ -10,4 +10,8 @@ open class StudyQueryProcessor(
     override fun findAllStudy(): List<Map<Long, Study>> {
         return studyRepository.findAllStudy()
     }
+
+    override fun findByKey(studyKey: String): Study {
+        return studyRepository.findByKey(studyKey=studyKey)
+    }
 }

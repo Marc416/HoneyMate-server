@@ -39,7 +39,7 @@ class StudyCommandProcessorTest {
                 location = "테스트 장소",
                 runningTime = "테스트 시간",
                 runningPeriod = "테스트 기간",
-                numberOfRecruits = 10
+                numberOfRecruits = 10,
             )
         )
         // Action, Assert
