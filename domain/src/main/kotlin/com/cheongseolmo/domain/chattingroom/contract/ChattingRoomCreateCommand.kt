@@ -11,7 +11,7 @@ data class ChattingRoomCreateCommand(
 ){
     fun toChattingRoom():ChattingRoom{
         return ChattingRoom(
-            studyKey = studyCode,
+            studyCode = studyCode,
             title = title,
             startAt = startAt,
             attendeeLimit = attendeeLimit
