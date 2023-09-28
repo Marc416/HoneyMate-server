@@ -27,13 +27,13 @@ class ChattingRoom {
     val deletedAt: ZonedDateTime? = null
 
     constructor(
-        studyKey: String,
+        studyCode: String,
         title: String,
         previewImage: String = "",
         startAt: ZonedDateTime,
         attendeeLimit: Int
     ) {
-        this.studyKey = studyKey
+        this.studyCode = studyCode
         this.title = title
         this.previewImage = previewImage
         this.startAt = startAt

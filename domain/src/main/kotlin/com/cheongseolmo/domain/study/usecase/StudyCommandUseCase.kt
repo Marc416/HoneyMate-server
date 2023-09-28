@@ -5,6 +5,6 @@ import com.cheongseolmo.domain.study.contract.command.StudyCodeRead
 import com.cheongseolmo.domain.study.entity.Study
 
 interface StudyCommandUseCase {
-    fun createStudy(study:Study): Study
+    fun createStudy(study:Study, defaultStudyCode: String? = null): Study
     fun createCode(command: CreateStudyCodeCommand): StudyCodeRead
 }

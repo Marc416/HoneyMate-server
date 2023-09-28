@@ -15,8 +15,10 @@ open class StudyCommandProcessor(
     val studyRepository: StudyRepository,
     val accountRepository: AccountRepository,
 ) : StudyCommandUseCase, StudyInviteUseCase {
-    override fun createStudy(study: Study): Study {
-        return studyRepository.save(study)
+    override fun createStudy(study: Study, defaultStudyCode: String?): Study {
+        val study = studyRepository.save(study)
+        createCode(CreateStudyCodeCommand(study.key, defaultStudyCode ?: "${study.title}${study.id}"))
+        return study
     }
 
     override fun createCode(command: CreateStudyCodeCommand): StudyCodeRead {
