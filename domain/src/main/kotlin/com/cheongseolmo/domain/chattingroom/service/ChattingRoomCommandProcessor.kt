@@ -20,25 +20,25 @@ open class ChattingRoomCommandProcessor(
         )
     }
 
-    override fun enter(accountKey: UUID, studyKey: String): Attendee {
-        val attendee = validatedAttendee(accountKey, studyKey)
-        val chattingRoom = chattingRoomRepository.findByStudyKey(studyKey)!!
+    override fun enter(accountKey: UUID, studyCode: String): Attendee {
+        val attendee = validatedAttendee(accountKey, studyCode)
+        val chattingRoom = chattingRoomRepository.findByStudyCode(studyCode)!!
         chattingRoom.attendees.add(attendee)
         chattingRoomRepository.save(chattingRoom)
         return attendeeRepository.save(attendee)
     }
 
-    override fun out(accountKey: UUID, studyKey: String): Attendee {
-        val attendee = validatedAttendee(accountKey, studyKey)
-        val chattingRoom = chattingRoomRepository.findByStudyKey(studyKey)!!
+    override fun out(accountKey: UUID, studyCode: String): Attendee {
+        val attendee = validatedAttendee(accountKey, studyCode)
+        val chattingRoom = chattingRoomRepository.findByStudyCode(studyCode)!!
         chattingRoom.attendees.minus(attendee)
         chattingRoomRepository.save(chattingRoom)
         attendee.chattingRoom = null
         return attendeeRepository.save(attendee)
     }
 
-    private fun validatedAttendee(accountKey: UUID, studyKey: String): Attendee {
-        val chattingRoom = chattingRoomRepository.findByStudyKey(studyKey) ?: throw IllegalArgumentException("존재하는 채팅방이 아닙니다")
+    private fun validatedAttendee(accountKey: UUID, studyCode: String): Attendee {
+        val chattingRoom = chattingRoomRepository.findByStudyCode(studyCode) ?: throw IllegalArgumentException("존재하는 채팅방이 아닙니다")
         val account = accountFinderPort.findByAccountKey(accountKey = accountKey)?: throw IllegalArgumentException("존재하는 사용자가 아닙니다")
         return Attendee(
             accountKey=accountKey,

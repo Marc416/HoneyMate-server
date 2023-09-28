@@ -13,12 +13,12 @@ open class ChattingRoomQueryProcessor(
     private val attendeeRepository: AttendeeRepository,
 
 ) : ChattingRoomQueryUseCase {
-    override fun getByStudyKey(studyKey: String): ChattingRoom {
-        return chattingRoomRepository.findByStudyKey(studyKey)?: throw Exception("채팅방이 존재하지 않습니다.")
+    override fun getByStudyCode(studyCode: String): ChattingRoom {
+        return chattingRoomRepository.findByStudyCode(studyCode)?: throw Exception("채팅방이 존재하지 않습니다.")
     }
 
-    override fun findMembersByStudyKey(studyKey: String): MutableSet<Attendee> {
-        val chattingRoom = chattingRoomRepository.findByStudyKey(studyKey)
+    override fun findMembersByStudyCode(studyCode: String): MutableSet<Attendee> {
+        val chattingRoom = chattingRoomRepository.findByStudyCode(studyCode)
 
         return chattingRoom?.attendees ?: mutableSetOf()
     }

@@ -7,6 +7,6 @@ import java.util.*
 
 interface ChattingRoomCommandUseCase {
     fun createRoom(chattingRoomCreateCommand: ChattingRoomCreateCommand):ChattingRoom
-    fun enter(accountKey: UUID, studyKey: String): Attendee
-    fun out(accountKey: UUID, studyKey: String): Attendee
+    fun enter(accountKey: UUID, studyCode: String): Attendee
+    fun out(accountKey: UUID, studyCode: String): Attendee
 }

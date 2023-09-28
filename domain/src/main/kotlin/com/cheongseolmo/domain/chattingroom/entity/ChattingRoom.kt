@@ -9,7 +9,7 @@ class ChattingRoom {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0
 
-    val studyKey: String                     // channelId 로 사용됩니다. studyKey에서 가져옵니다.
+    val studyCode: String                     // channelId 로 사용됩니다. studyCode에서 가져옵니다.
 
     @OneToMany(
         mappedBy = "chattingRoom",
