@@ -6,10 +6,6 @@ import java.util.*
 
 class FakeStudyRepository: StudyRepository {
     private val map: MutableMap<Long, Study> = mutableMapOf()
-    override fun findByCode(code: String): Study {
-        TODO("Not yet implemented")
-    }
-
     override fun findAllStudy(): List<Map<Long, Study>> {
         return map.map { mapOf(it.key to it.value) }
     }
