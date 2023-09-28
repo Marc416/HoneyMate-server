@@ -36,7 +36,7 @@ class StudyController(
     fun createStudy(
         @RequestBody studyCommand: StudyCommand,
     ) {
-        studyCommandUseCase.createStudy(studyCommand.to())
+        studyCommandUseCase.createStudy(studyCommand.to(), defaultStudyCode = studyCommand.defaultStudyCode)
     }
 
     @Operation(
@@ -118,7 +118,8 @@ class StudyController(
     @Operation(
         tags = ["Study"],
         summary = "스터디 참가링크에서 모바일 앱으로 리다이렉트",
-        description = "/invite 에서 보낸 링크를 타고 들어오게 됩니다. /join 에서는 모바일 앱으로 리다이렉트 해줍니다."
+        description = "/invite 에서 보낸 링크를 타고 들어오게 됩니다. /join 에서는 모바일 앱으로 리다이렉트 해줍니다." +
+            "ex) ios-or-android-applink-root://join-waiting-room?accountKey=7d522e5e-bdf6-452a-b414-23b9ea62adeb&studyCode=study-code-for-url"
     )
     @GetMapping("/join")
     fun join(

@@ -24,7 +24,7 @@ class ChattingRoomQueryController(
     fun getChattingRoom(
         @PathVariable studyCode: String,
     ): ChattingRoomResponse {
-        return ChattingRoomResponse.of(chattingRoomQueryUseCase.getByStudyKey(studyCode))
+        return ChattingRoomResponse.of(chattingRoomQueryUseCase.getByStudyCode(studyCode))
     }
 
     @Operation(
@@ -35,7 +35,7 @@ class ChattingRoomQueryController(
     fun getChattingRoomMembers(
         @PathVariable studyCode: String,
     ): List<AttendeesResponse> {
-        val attendees = chattingRoomQueryUseCase.findMembersByStudyKey(studyCode = studyCode)
+        val attendees = chattingRoomQueryUseCase.findMembersByStudyCode(studyCode = studyCode)
         return attendees.map {
             AttendeesResponse.of(it)
         }
