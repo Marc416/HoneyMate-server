@@ -14,4 +14,8 @@ class FakeAccountRepository : AccountRepository {
     override fun findByEmail(email: String): Account? {
         return map.values.find { it.email == email }
     }
+
+    override fun findByAccountKey(accountKey: UUID): Account? {
+        return map[accountKey]
+    }
 }

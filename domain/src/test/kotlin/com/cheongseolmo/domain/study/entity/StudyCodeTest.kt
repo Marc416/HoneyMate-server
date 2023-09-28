@@ -17,7 +17,7 @@ class StudyCodeTest {
                 runningTime = "2시간",
                 runningPeriod = "3일",
                 numberOfRecruits = 1,
-            )
+            ),
         )
 
     }
