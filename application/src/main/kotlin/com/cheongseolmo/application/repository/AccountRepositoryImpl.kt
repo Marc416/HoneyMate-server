@@ -17,9 +17,14 @@ class AccountRepositoryImpl(
     override fun findByEmail(email: String): Account? {
         return jpaRepository.findByEmail(email)
     }
+
+    override fun findByAccountKey(accountKey: UUID): Account? {
+        return jpaRepository.findByKey(key = accountKey)
+    }
 }
 
 interface AccountRepositoryJpa: JpaRepository<Account, UUID> {
     fun findByEmail(email: String): Account?
+    fun findByKey(key: UUID): Account?
 }
 
