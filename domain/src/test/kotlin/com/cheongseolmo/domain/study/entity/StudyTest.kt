@@ -11,6 +11,7 @@ class StudyTest {
         val title = "테스트 타이틀"
         val subTitle = "테스트 부 타이틀"
         val description = "테스트 설명"
+        val studyKey = "스터디 키"
 
         val spec = StudySpec(
             location = "테스트 장소",
@@ -24,7 +25,8 @@ class StudyTest {
             title = title,
             subtitle = subTitle,
             description = description,
-            spec = spec
+            spec = spec,
+            studyKey= studyKey
         )
 
         //then

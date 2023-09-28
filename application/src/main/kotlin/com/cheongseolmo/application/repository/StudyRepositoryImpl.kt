@@ -9,6 +9,10 @@ import org.springframework.stereotype.Repository
 class StudyRepositoryImpl(
     private val jpaRepository: JpaStudyRepository,
 ):StudyRepository {
+    override fun findByKey(studyKey: String): Study {
+        return jpaRepository.findByStudyKey(studyKey=studyKey)
+    }
+
     override fun findAllStudy(): List<Map<Long, Study>> {
         return jpaRepository.findAll().map {
             mapOf(it.id to it)
@@ -23,4 +27,5 @@ class StudyRepositoryImpl(
 
 interface JpaStudyRepository: JpaRepository<Study, Long>{
     override fun findAll(): List<Study>
+    fun findByStudyKey(studyKey: String): Study
 }

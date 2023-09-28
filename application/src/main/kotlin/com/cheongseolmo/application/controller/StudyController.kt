@@ -41,7 +41,7 @@ class StudyController(
 
     @Operation(
         tags = ["Study"],
-        summary = "스터디 조회",
+        summary = "전체 스터디 조회",
     )
     @GetMapping("")
     fun findAllStudy(): List<Map<Long, StudyResponse>> {
@@ -50,6 +50,17 @@ class StudyController(
                 mapOf(it.key to StudyResponse.of(it.value))
             }
         }
+    }
+
+    @Operation(
+        tags = ["Study"],
+        summary = "스터디 단건 조회",
+    )
+    @GetMapping("/{studyKey}")
+    fun findStudyByKey(
+        @PathVariable studyKey: String,
+    ):  StudyResponse {
+        return StudyResponse.of(studyQueryUseCase.findByKey(studyKey=studyKey))
     }
 
     @Operation(
@@ -148,6 +159,7 @@ data class StudyResponse(
 
 data class StudyCommand(
     val title: String,
+    val studyKey: String,
     val subtitle: String,
     val description: String,
     val spec: StudySpecCommand,
@@ -162,6 +174,7 @@ data class StudyCommand(
     fun to(): Study {
         return Study(
             title = title,
+            studyKey = studyKey,
             subtitle = subtitle,
             description = description,
             spec = StudySpec(
