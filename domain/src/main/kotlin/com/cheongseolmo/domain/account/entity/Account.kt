@@ -21,9 +21,11 @@ class Account {
     constructor(
         key: UUID,
         email: String,
+        name: String,
     ) {
         this.key = key
         this.email = email
+        this.name = name
         this.createdAt = ZonedDateTime.now()
         this.modifiedAt = ZonedDateTime.now()
     }
@@ -32,10 +34,12 @@ class Account {
         fun create(
             key: UUID=UUID.randomUUID(),
             email: String,
+            name: String,
         ): Account {
             return Account(
                 key = key,
                 email = email,
+                name = name,
             )
         }
     }
