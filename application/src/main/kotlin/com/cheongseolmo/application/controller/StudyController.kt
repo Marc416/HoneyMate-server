@@ -1,22 +1,22 @@
 package com.cheongseolmo.application.controller
 
-import com.cheongseolmo.domain.account.usecase.AccountCreatorUseCase
-import com.cheongseolmo.domain.account.usecase.AccountFinderUseCase
 import com.cheongseolmo.domain.notification.contract.MailTemplate
+import com.cheongseolmo.domain.study.contract.command.CreateStudyCodeCommand
+import com.cheongseolmo.domain.study.contract.command.StudyCodeRead
 import com.cheongseolmo.domain.study.entity.Study
 import com.cheongseolmo.domain.study.entity.StudySpec
 import com.cheongseolmo.domain.study.service.StudyFacadeUseCase
 import com.cheongseolmo.domain.study.usecase.EmailUseCase
 import com.cheongseolmo.domain.study.usecase.StudyCommandUseCase
-import com.cheongseolmo.domain.study.usecase.StudyInviteUseCase
 import com.cheongseolmo.domain.study.usecase.StudyQueryUseCase
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import mu.KotlinLogging
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import org.springframework.web.servlet.view.RedirectView
+import java.time.ZonedDateTime
 import java.util.*
-import javax.persistence.*
 
 private val logging = KotlinLogging.logger {}
 
@@ -36,7 +36,7 @@ class StudyController(
     fun createStudy(
         @RequestBody studyCommand: StudyCommand,
     ) {
-        studyCommandUseCase.createStudy(studyCommand.to())
+        studyCommandUseCase.createStudy(studyCommand.to(), defaultStudyCode = studyCommand.defaultStudyCode)
     }
 
     @Operation(
@@ -53,14 +53,33 @@ class StudyController(
     }
 
     @Operation(
+        security = [
+            SecurityRequirement(name = "Authorization"),
+        ],
         tags = ["Study"],
-        summary = "스터디 단건 조회",
+        summary = "특정 스터디의 코드 생성",
     )
-    @GetMapping("/{studyKey}")
+    @PostMapping("/{studyKey}/code")
+    fun createStudyCode(
+        @PathVariable studyKey: UUID,
+        @RequestBody request: StudyCodeRequest,
+    ): StudyCodeRead {
+        return studyCommandUseCase.createCode(
+            command = request.toCommand(
+                studyKey = studyKey,
+            )
+        )
+    }
+
+    @Operation(
+        tags = ["Study"],
+        summary = "스터디 단건 조회(코드로 조회)",
+    )
+    @GetMapping("/{code}")
     fun findStudyByKey(
-        @PathVariable studyKey: String,
+        @PathVariable code: String,
     ):  StudyResponse {
-        return StudyResponse.of(studyQueryUseCase.findByKey(studyKey=studyKey))
+        return StudyResponse.of(studyQueryUseCase.findByCode(code=code))
     }
 
     @Operation(
@@ -73,7 +92,8 @@ class StudyController(
     ): Any {
         val mobileAppLink = studyFacadeUseCase.invite(
             email = inviteRequest.email,
-            studyKey = UUID.fromString(inviteRequest.studyKey),
+            name = inviteRequest.name,
+            studyCode = inviteRequest.studyCode,
             appLink = inviteRequest.appLink
         )
 
@@ -83,7 +103,7 @@ class StudyController(
         logging.info { "host: $hostAddress" }
         val redirectUrl = "${hostAddress}/study/join?mobileAppLink=$mobileAppLink"
 
-        val redirectUrlHyperlink ="<HTML><body> <a href=\"${redirectUrl}\">InviteLink</a></body></HTML>"
+        val redirectUrlHyperlink = "<HTML><body> <a href=\"${redirectUrl}\">InviteLink</a></body></HTML>"
 
         return emailUseCase.send(
             mailTemplate = MailTemplate(
@@ -98,7 +118,8 @@ class StudyController(
     @Operation(
         tags = ["Study"],
         summary = "스터디 참가링크에서 모바일 앱으로 리다이렉트",
-        description = "/invite 에서 보낸 링크를 타고 들어오게 됩니다. /join 에서는 모바일 앱으로 리다이렉트 해줍니다."
+        description = "/invite 에서 보낸 링크를 타고 들어오게 됩니다. /join 에서는 모바일 앱으로 리다이렉트 해줍니다." +
+            "ex) ios-or-android-applink-root://join-waiting-room?accountKey=7d522e5e-bdf6-452a-b414-23b9ea62adeb&studyCode=study-code-for-url"
     )
     @GetMapping("/join")
     fun join(
@@ -111,12 +132,14 @@ class StudyController(
 
 data class InviteRequest(
     val email: String,
-    val studyKey: String,
+    val studyCode: String,
+    val name: String,
     val appLink: String     // 모바일에서 자유롭게 앱링크를 만들 수 있도록 프로퍼티로 받도록 합니다.
 )
 
 data class StudyResponse(
     val id: Long,
+    val key: String,
     val title: String,
     val subtitle: String,
     val description: String,
@@ -146,6 +169,7 @@ data class StudyResponse(
         fun of(study: Study): StudyResponse {
             return StudyResponse(
                 id = study.id,
+                key = study.key.toString(),
                 title = study.title,
                 subtitle = study.subtitle,
                 description = study.description,
@@ -159,7 +183,7 @@ data class StudyResponse(
 
 data class StudyCommand(
     val title: String,
-    val studyKey: String,
+    val defaultStudyCode: String? = null,
     val subtitle: String,
     val description: String,
     val spec: StudySpecCommand,
@@ -174,7 +198,6 @@ data class StudyCommand(
     fun to(): Study {
         return Study(
             title = title,
-            studyKey = studyKey,
             subtitle = subtitle,
             description = description,
             spec = StudySpec(
@@ -183,6 +206,20 @@ data class StudyCommand(
                 runningPeriod = spec.runningPeriod,
                 numberOfRecruits = spec.numberOfRecruits,
             )
+        )
+    }
+}
+
+data class StudyCodeRequest(
+    val displayName: String,
+    // 코드의 만료 시간은 있을수도 없을 수도 있습니다.
+    val expiredAt: ZonedDateTime? = null,
+) {
+    fun toCommand(studyKey: UUID): CreateStudyCodeCommand {
+        return CreateStudyCodeCommand(
+            studyKey = studyKey,
+            displayName = displayName,
+            expiredAt = expiredAt,
         )
     }
 }

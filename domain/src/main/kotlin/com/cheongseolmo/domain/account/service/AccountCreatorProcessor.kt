@@ -7,7 +7,7 @@ import com.cheongseolmo.domain.account.usecase.AccountCreatorUseCase
 open class AccountCreatorProcessor(
     private val accountRepository: AccountRepository
 ) :AccountCreatorUseCase{
-    override fun create(email: String): Account {
-        return accountRepository.save(Account.create(email = email))
+    override fun create(email: String, name: String): Account {
+        return accountRepository.save(Account.create(email = email, name = name))
     }
 }

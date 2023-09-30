@@ -20,22 +20,22 @@ class ChattingRoomQueryController(
         tags = ["ChattingRoom"],
         summary = "채팅룸 조회",
     )
-    @GetMapping("/{studyKey}")
+    @GetMapping("/{studyCode}")
     fun getChattingRoom(
-        @PathVariable studyKey: String,
+        @PathVariable studyCode: String,
     ): ChattingRoomResponse {
-        return ChattingRoomResponse.of(chattingRoomQueryUseCase.getByStudyKey(studyKey))
+        return ChattingRoomResponse.of(chattingRoomQueryUseCase.getByStudyCode(studyCode))
     }
 
     @Operation(
         tags = ["ChattingRoom"],
         summary = "채팅룸 멤버 조회",
     )
-    @GetMapping("/{studyKey}/members")
+    @GetMapping("/{studyCode}/members")
     fun getChattingRoomMembers(
-        @PathVariable studyKey: String,
+        @PathVariable studyCode: String,
     ): List<AttendeesResponse> {
-        val attendees = chattingRoomQueryUseCase.findMembersByStudyKey(studyKey = studyKey)
+        val attendees = chattingRoomQueryUseCase.findMembersByStudyCode(studyCode = studyCode)
         return attendees.map {
             AttendeesResponse.of(it)
         }
@@ -52,7 +52,7 @@ data class ChattingRoomResponse(
     companion object {
         fun of(chattingRoom: ChattingRoom): ChattingRoomResponse {
             return ChattingRoomResponse(
-                studyKey = chattingRoom.studyKey,
+                studyKey = chattingRoom.studyCode,
                 title = chattingRoom.title,
                 startAt = chattingRoom.startAt.toString(),
                 attendeeLimit = chattingRoom.attendeeLimit,

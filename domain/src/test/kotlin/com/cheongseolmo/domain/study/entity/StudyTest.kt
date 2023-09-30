@@ -26,7 +26,6 @@ class StudyTest {
             subtitle = subTitle,
             description = description,
             spec = spec,
-            studyKey= studyKey
         )
 
         //then

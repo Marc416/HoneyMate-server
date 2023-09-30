@@ -1,13 +1,12 @@
 package com.cheongseolmo.domain.chattingroom.repository
 
 import com.cheongseolmo.domain.chattingroom.entity.ChattingRoom
-import com.cheongseolmo.domain.study.entity.Study
 
 class FakeChattingRoomRepository :ChattingRoomRepository{
     private val map: MutableMap<Long, ChattingRoom> = mutableMapOf()
-    override fun findByStudyKey(studyKey: String): ChattingRoom? {
+    override fun findByStudyCode(studyCode: String): ChattingRoom? {
         map.forEach {
-            if(it.value.studyKey==studyKey){
+            if(it.value.studyCode==studyCode){
                 return it.value
             }
         }

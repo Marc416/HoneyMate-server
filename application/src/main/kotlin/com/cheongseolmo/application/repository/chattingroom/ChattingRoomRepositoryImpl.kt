@@ -9,8 +9,8 @@ import org.springframework.stereotype.Repository
 class ChattingRoomRepositoryImpl(
     val jpaRepository: JpaChattingRoomRepository,
 ): ChattingRoomRepository {
-    override fun findByStudyKey(studyKey: String): ChattingRoom? {
-        return jpaRepository.findByStudyKey(studyKey)
+    override fun findByStudyCode(studyCode: String): ChattingRoom? {
+        return jpaRepository.findByStudyCode(studyCode)
     }
 
     override fun save(chattingRoom: ChattingRoom): ChattingRoom {
@@ -19,5 +19,5 @@ class ChattingRoomRepositoryImpl(
 }
 
 interface JpaChattingRoomRepository: JpaRepository<ChattingRoom, String> {
-    fun findByStudyKey(studyKey: String): ChattingRoom?
+    fun findByStudyCode(studyCode: String): ChattingRoom?
 }

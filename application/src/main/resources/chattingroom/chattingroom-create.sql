@@ -1,7 +1,7 @@
 CREATE TABLE honey_mate_dev.chatting_room
 (
     id             BIGINT       NOT NULL AUTO_INCREMENT primary key comment 'id',
-    study_key      VARCHAR(100) NOT NULL unique comment '스터디 키',
+    study_code      VARCHAR(100) NOT NULL unique comment '스터디 키',
     title          VARCHAR(100) NOT NULL comment '채팅룸 제목',
     preview_image  VARCHAR(100) NOT NULL comment '이름',
     start_at       TIMESTAMP    NOT NULL comment '채팅룸 오픈시간',

@@ -3,6 +3,7 @@ package com.cheongseolmo.application.bean
 import com.cheongseolmo.domain.account.repository.AccountRepository
 import com.cheongseolmo.domain.account.usecase.AccountCreatorUseCase
 import com.cheongseolmo.domain.account.usecase.AccountFinderUseCase
+import com.cheongseolmo.domain.study.repository.StudyCodeRepository
 import com.cheongseolmo.domain.study.repository.StudyRepository
 import com.cheongseolmo.domain.study.service.StudyCommandProcessor
 import com.cheongseolmo.domain.study.service.StudyFacadeProcessor
@@ -22,8 +23,10 @@ class StudyCommandService(
 @Service
 class StudyQueryService(
     studyRepository: StudyRepository,
+    studyCodeRepository: StudyCodeRepository,
 ) : StudyQueryProcessor(
     studyRepository = studyRepository,
+    studyCodeRepository = studyCodeRepository,
 )
 
 @Service

@@ -41,7 +41,7 @@ class ChattingRoomCommandProcessorTest {
     fun `채팅룸을 생성할 수 있다`() {
         // Arrange, Action
         val chattingRoomCommand = ChattingRoomCreateCommand(
-            studyKey = "studyKey",
+            studyCode = "studyKey",
             title = "title",
             startAt = ZonedDateTime.now(),
             attendeeLimit = 10
@@ -49,7 +49,7 @@ class ChattingRoomCommandProcessorTest {
         val createdRoom = chattingRoomCommandUseCommandUseCase.createRoom(
             chattingRoomCommand
         )
-        val chattingRoom = chattingRoomRepository.findByStudyKey("studyKey")
+        val chattingRoom = chattingRoomRepository.findByStudyCode("studyKey")
 
         // Assert
         assertThat(createdRoom.id).isEqualTo(chattingRoom?.id)
@@ -64,7 +64,7 @@ class ChattingRoomCommandProcessorTest {
         assertThatThrownBy {
             chattingRoomCommandUseCommandUseCase.enter(
                 accountKey = accountKey,
-                studyKey = channelId
+                studyCode = channelId
             )
         }.isInstanceOf(IllegalArgumentException::class.java)
     }
@@ -76,7 +76,7 @@ class ChattingRoomCommandProcessorTest {
         val studyKey = "studyKey"
         // 모임 생성
         val chattingRoomCommand = ChattingRoomCreateCommand(
-            studyKey = studyKey,
+            studyCode = studyKey,
             title = "title",
             startAt = ZonedDateTime.now(),
             attendeeLimit = 10
@@ -97,13 +97,13 @@ class ChattingRoomCommandProcessorTest {
         // 채팅방 입장
         val attendee = chattingRoomCommandUseCommandUseCase.enter(
             accountKey = accountKey,
-            studyKey = studyKey
+            studyCode = studyKey
         )
-        val chattingRoomEntered = chattingRoomRepository.findByStudyKey(studyKey)
+        val chattingRoomEntered = chattingRoomRepository.findByStudyCode(studyKey)
 
 
         // Assert
-        assertThat(attendee.chattingRoom?.studyKey).isEqualTo(studyKey)
+        assertThat(attendee.chattingRoom?.studyCode).isEqualTo(studyKey)
         assertThat(chattingRoomEntered?.attendees?.size).isEqualTo(1)
 
     }

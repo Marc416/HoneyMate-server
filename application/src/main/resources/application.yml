@@ -3,6 +3,8 @@ server:
   servlet:
     context-path: /
 
+
+
 ncloud:
   accesskey: ${ncloud_accesskey}
   secretkey: ${ncloud_secretkey}
